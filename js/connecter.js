@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Décoder le token (attention, ce n'est pas sécurisé côté client pour des actions sensibles)
         const payload = JSON.parse(atob(token.split('.')[1])); // Décodage base64
         const email = payload.data.email;
-
+        console.log(email);
         if (email) {
             emailElement.textContent = email;
         } else {
