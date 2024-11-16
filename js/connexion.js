@@ -39,7 +39,7 @@ loginForm.addEventListener('submit', async (e) => {
             console.log(data); // Affiche la réponse du serveur dans la console
 
             //sauvegarder l'email dans localStorage
-            localStorage.setItem('adminEmail', data.email);
+            localStorage.setItem('adminEmail', data.data.email);
             // Si la connexion est réussie, rediriger vers le dashboard
             if (data.token) {
                 // Sauvegarder le token dans localStorage
