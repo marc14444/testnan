@@ -44,7 +44,7 @@ loginForm.addEventListener('submit', async (e) => {
                 localStorage.setItem('adminToken', data.token);
                 
                 //sauvegarder l'email dans localStorage
-                localStorage.setItem('adminEmail', data.email);
+                localStorage.setItem('adminEmail', data.data.email);
 
                 // Redirection vers le dashboard
                 window.location.href = './html/connecter.html'; 
