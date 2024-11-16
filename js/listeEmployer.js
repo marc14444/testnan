@@ -196,26 +196,32 @@ async function editEmploye(id) {
     // Afficher le popup
     editPopup.style.display = 'flex';
 
-    // Appel de l'API pour récupérer les données de l'employé
+    // Récupération du token
     const token = localStorage.getItem('adminToken');
+    if (!token) {
+      alert('Vous devez être connecté en tant qu\'administrateur.');
+      return;
+    }
+
+    // Appel API pour récupérer les données de l'employé
     const response = await fetch(`https://testnanbackend.onrender.com/api/admin/employes/${id}`, {
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        'Authorization': `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) {
       throw new Error('Erreur lors de la récupération des détails de l\'employé');
     }
 
-    const employe = await response.json();
+    const { data: employe } = await response.json();
 
     // Pré-remplir les champs du formulaire
-    employeIdInput.value = id;
-    editNom.value = employe.nom;
-    editPrenom.value = employe.prenom;
-    editEmail.value = employe.email;
-    editRole.value = employe.role;
+    employeIdInput.value = employe._id;
+    editNom.value = employe.nom || '';
+    editPrenom.value = employe.prenom || '';
+    editEmail.value = employe.email || '';
+    editRole.value = employe.role || 'Employé'; // Par défaut, Employé
   } catch (error) {
     console.error('Erreur:', error);
     alert('Impossible de charger les données de l\'employé.');
@@ -232,14 +238,20 @@ editForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   try {
-    // Récupérer les données du formulaire
+    // Récupération des données du formulaire
     const id = employeIdInput.value;
     const updatedEmploye = {
-      nom: editNom.value,
-      prenom: editPrenom.value,
-      email: editEmail.value,
-      role: editRole.value
+      nom: editNom.value.trim(),
+      prenom: editPrenom.value.trim(),
+      email: editEmail.value.trim(),
+      role: editRole.value.trim(),
     };
+
+    // Validation simple
+    if (!updatedEmploye.nom || !updatedEmploye.prenom || !updatedEmploye.email) {
+      alert('Veuillez remplir tous les champs obligatoires.');
+      return;
+    }
 
     // Appel API pour mettre à jour les données de l'employé
     const token = localStorage.getItem('adminToken');
@@ -247,24 +259,39 @@ editForm.addEventListener('submit', async (event) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify(updatedEmploye)
+      body: JSON.stringify(updatedEmploye),
     });
 
     if (!response.ok) {
       throw new Error('Erreur lors de la mise à jour des données de l\'employé');
     }
 
-    // Fermer le popup et recharger la liste
+    const { message, data } = await response.json();
+
+    // Mise à jour réussie
+    alert(message);
     editPopup.style.display = 'none';
-    alert('Employé modifié avec succès !');
-    location.reload(); // Recharge la liste des employés
+
+    // Rechargez la liste des employés (ou mettez à jour uniquement l'employé modifié si vous avez un tableau)
+    updateEmployeeInUI(data);
   } catch (error) {
     console.error('Erreur:', error);
     alert('Impossible de modifier les données de l\'employé.');
   }
 });
+
+// Fonction pour mettre à jour l'affichage dans l'interface utilisateur
+function updateEmployeeInUI(employe) {
+  const employeeRow = document.querySelector(`#employee-row-${employe._id}`);
+  if (employeeRow) {
+    employeeRow.querySelector('.employee-nom').textContent = employe.nom;
+    employeeRow.querySelector('.employee-prenom').textContent = employe.prenom;
+    employeeRow.querySelector('.employee-email').textContent = employe.email;
+    employeeRow.querySelector('.employee-role').textContent = employe.role;
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('adminToken');
