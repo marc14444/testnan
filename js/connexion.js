@@ -11,9 +11,6 @@ loginForm.addEventListener('submit', async (e) => {
     const email = emailField.value;
     const motDePasse = passwordField.value;
     
-    //sauvegarder l'email dans localStorage
-    localStorage.setItem('adminEmail', email);
-    
     // Vérifier si les champs sont remplis
     if (!email || !motDePasse) {
         alert('Veuillez remplir tous les champs');
@@ -40,6 +37,7 @@ loginForm.addEventListener('submit', async (e) => {
         // Vérifier si la réponse est ok (statut 200)
         if (response.ok) {
             const data = await response.json();
+            localStorage.setItem('userData', JSON.stringify(data));
             console.log(data); // Affiche la réponse du serveur dans la console
 
             // Si la connexion est réussie, rediriger vers le dashboard
