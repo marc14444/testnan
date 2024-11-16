@@ -8,7 +8,7 @@ window.addEventListener('load', async () => {
       }
     
       // Appel de l'API pour récupérer la liste des employés avec le token dans l'en-tête
-      const response = await fetch('http://localhost:9000/api/admin/employes', {
+      const response = await fetch('https://testnanbackend.onrender.com/api/admin/employes', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ window.addEventListener('load', async () => {
     if (confirmDelete) {
       try {
         // Appel de l'API pour supprimer l'employé
-        const response = await fetch(`http://localhost:9000/api/admin/employes/${id}`, {
+        const response = await fetch(`https://testnanbackend.onrender.com/api/admin/employes/${id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -184,7 +184,7 @@ window.addEventListener('load', async () => {
   // Fonction pour afficher la popup de modification avec les données de l'employé
   function editEmploye(employeeId) {
     // Appel API pour récupérer les données de l'employé
-    fetch(`http://localhost:9000/api/admin/employes/${employeeId}`, {
+    fetch(`https://testnanbackend.onrender.com/api/admin/employes/${employeeId}`, {
       method: 'GET',
       headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,

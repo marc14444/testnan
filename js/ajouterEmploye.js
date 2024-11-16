@@ -20,7 +20,7 @@ document.getElementById('createEmployeeForm').addEventListener('submit', async (
     formData.append('commune', document.getElementById('commune').value);
 
     try {
-        const response = await fetch('http://localhost:9000/api/admin/employes', {
+        const response = await fetch('https://testnanbackend.onrender.com/api/admin/employes', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,  // Ajout du token dans l'en-tête

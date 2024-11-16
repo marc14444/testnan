@@ -25,7 +25,7 @@ loginForm.addEventListener('submit', async (e) => {
 
     // Faire une requête POST vers l'API
     try {
-        const response = await fetch('http://localhost:9000/api/admin/login', {
+        const response = await fetch('https://testnanbackend.onrender.com/api/admin/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
