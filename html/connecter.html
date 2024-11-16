@@ -13,6 +13,7 @@
     <div class="flex h-screen">
         <div class="bg-blue-800 text-white w-64 p-4 space-y-6">
             <h2 class="text-2xl font-bold">MarcServices</h2>
+            <p id="userEmail" class="text-sm mt-2">Chargement...</p>
             <ul class="space-y-2">
                 <li><a href="#" class="text-white hover:bg-blue-600 p-2 rounded">Dashboard</a></li>
                 <li><a href="#" class="text-white hover:bg-blue-600 p-2 rounded">Statistiques</a></li>
@@ -21,6 +22,7 @@
                 <button id="deconnexion" class="text-white hover:bg-blue-600 p-2 rounded">Déconnexion</button>
             </ul>
         </div>
+        
 
         <!-- Main content -->
         <div class="flex-1 p-6">
@@ -68,24 +70,36 @@
                 </div>
 
                 <!-- Popup Modifier Employé -->
-<div id="editEmployeeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
-        <h3 class="text-xl font-semibold mb-4">Modifier un Employé</h3>
-        <form id="editEmployeeForm">
-            <input type="hidden" id="editEmployeeId" /> <!-- Hidden input for employee ID -->
-            <input type="text" id="editNom" placeholder="Nom" class="w-full p-2 border border-gray-300 rounded mb-2" required>
-            <input type="text" id="editPrenom" placeholder="Prénom" class="w-full p-2 border border-gray-300 rounded mb-2" required>
-            <input type="email" id="editEmail" placeholder="Email" class="w-full p-2 border border-gray-300 rounded mb-2" required>
-            <input type="text" id="editNumeroTelephone" placeholder="Numéro de Téléphone" class="w-full p-2 border border-gray-300 rounded mb-2" required>
-            <input type="text" id="editRole" placeholder="Rôle" class="w-full p-2 border border-gray-300 rounded mb-2" required>
-            <input type="text" id="editPays" placeholder="Pays" class="w-full p-2 border border-gray-300 rounded mb-2" required>
-            <input type="text" id="editVille" placeholder="Ville" class="w-full p-2 border border-gray-300 rounded mb-2" required>
-            <input type="text" id="editCommune" placeholder="Commune" class="w-full p-2 border border-gray-300 rounded mb-2" required>
-            <button type="submit" class="bg-blue-800 text-white p-2 rounded">Sauvegarder</button>
-            <button type="button" onclick="closeEditModal()" class="bg-gray-400 text-white p-2 rounded mt-2">Annuler</button>
-        </form>
+<div id="editPopup" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-96">
+      <h2 class="text-lg font-semibold mb-4">Modifier Employé</h2>
+      <form id="editForm">
+        <input type="hidden" id="employeId" />
+        <div class="mb-4">
+          <label for="editNom" class="block text-sm font-medium">Nom</label>
+          <input type="text" id="editNom" class="border rounded w-full p-2" required />
+        </div>
+        <div class="mb-4">
+          <label for="editPrenom" class="block text-sm font-medium">Prénom</label>
+          <input type="text" id="editPrenom" class="border rounded w-full p-2" required />
+        </div>
+        <div class="mb-4">
+          <label for="editEmail" class="block text-sm font-medium">Email</label>
+          <input type="email" id="editEmail" class="border rounded w-full p-2" required />
+        </div>
+        <div class="mb-4">
+          <label for="editRole" class="block text-sm font-medium">Rôle</label>
+          <input type="text" id="editRole" class="border rounded w-full p-2" required />
+        </div>
+        <div class="flex justify-end space-x-4">
+          <button type="button" id="cancelEdit" class="bg-gray-500 text-white px-4 py-2 rounded">Annuler</button>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Enregistrer</button>
+        </div>
+      </form>
     </div>
-</div>
+  </div>
+  
+
 
             </div>
         </div>

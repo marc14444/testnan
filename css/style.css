@@ -23,3 +23,7 @@ button:hover {
     align-items: center;
 }
 
+#editPopup {
+    display: none;
+  }
+  

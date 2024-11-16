@@ -123,7 +123,7 @@ window.addEventListener('load', async () => {
       }
     
       // Appel de l'API pour récupérer des statistiques supplémentaires
-      const response = await fetch('http://localhost:9000/api/admin/employes/stats', {
+      const response = await fetch('https://testnanbackend.onrender.com/api/admin/employes/stats', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -181,45 +181,106 @@ window.addEventListener('load', async () => {
     }
   });
   
-  // Fonction pour afficher la popup de modification avec les données de l'employé
-  function editEmploye(employeeId) {
-    // Appel API pour récupérer les données de l'employé
-    fetch(`https://testnanbackend.onrender.com/api/admin/employes/${employeeId}`, {
-      method: 'GET',
+  const editPopup = document.getElementById('editPopup');
+const editForm = document.getElementById('editForm');
+const employeIdInput = document.getElementById('employeId');
+const editNom = document.getElementById('editNom');
+const editPrenom = document.getElementById('editPrenom');
+const editEmail = document.getElementById('editEmail');
+const editRole = document.getElementById('editRole');
+const cancelEdit = document.getElementById('cancelEdit');
+
+// Fonction pour ouvrir le popup et charger les données de l'employé
+async function editEmploye(id) {
+  try {
+    // Afficher le popup
+    editPopup.style.display = 'flex';
+
+    // Appel de l'API pour récupérer les données de l'employé
+    const token = localStorage.getItem('adminToken');
+    const response = await fetch(`https://testnanbackend.onrender.com/api/admin/employes/${id}`, {
       headers: {
-          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
-          'Content-Type': 'application/json'
+        'Authorization': `Bearer ${token}`
       }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Si l'employé est trouvé
-        if (data && data.data) {
-            const employe = data.data;
-            // Remplir le formulaire avec les données de l'employé
-            document.getElementById('editEmployeeId').value = employe._id;
-            document.getElementById('editNom').value = employe.nom;
-            document.getElementById('editPrenom').value = employe.prenom;
-            document.getElementById('editEmail').value = employe.email;
-            document.getElementById('editNumeroTelephone').value = employe.numeroTelephone;
-            document.getElementById('editRole').value = employe.role;
-            document.getElementById('editPays').value = employe.pays;
-            document.getElementById('editVille').value = employe.ville;
-            document.getElementById('editCommune').value = employe.commune;
-  
-            // Afficher la popup
-            document.getElementById('editEmployeeModal').classList.remove('hidden');
-        } else {
-            alert("Employé non trouvé.");
-        }
-    })
-    .catch(error => {
-        console.error("Erreur lors de la récupération des données de l'employé:", error);
     });
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la récupération des détails de l\'employé');
+    }
+
+    const employe = await response.json();
+
+    // Pré-remplir les champs du formulaire
+    employeIdInput.value = id;
+    editNom.value = employe.nom;
+    editPrenom.value = employe.prenom;
+    editEmail.value = employe.email;
+    editRole.value = employe.role;
+  } catch (error) {
+    console.error('Erreur:', error);
+    alert('Impossible de charger les données de l\'employé.');
   }
-  
-  // Fonction pour fermer la popup de modification
-  function closeEditEmployeeModal() {
-    document.getElementById('editEmployeeModal').classList.add('hidden');
+}
+
+// Fonction pour fermer le popup
+cancelEdit.addEventListener('click', () => {
+  editPopup.style.display = 'none';
+});
+
+// Soumission du formulaire de modification
+editForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  try {
+    // Récupérer les données du formulaire
+    const id = employeIdInput.value;
+    const updatedEmploye = {
+      nom: editNom.value,
+      prenom: editPrenom.value,
+      email: editEmail.value,
+      role: editRole.value
+    };
+
+    // Appel API pour mettre à jour les données de l'employé
+    const token = localStorage.getItem('adminToken');
+    const response = await fetch(`https://testnanbackend.onrender.com/api/admin/employes/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(updatedEmploye)
+    });
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la mise à jour des données de l\'employé');
+    }
+
+    // Fermer le popup et recharger la liste
+    editPopup.style.display = 'none';
+    alert('Employé modifié avec succès !');
+    location.reload(); // Recharge la liste des employés
+  } catch (error) {
+    console.error('Erreur:', error);
+    alert('Impossible de modifier les données de l\'employé.');
   }
-  
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('adminToken');
+    const emailElement = document.getElementById('userEmail');
+
+    if (token) {
+        // Décoder le token (attention, ce n'est pas sécurisé côté client pour des actions sensibles)
+        const payload = JSON.parse(atob(token.split('.')[1])); // Décodage base64
+        const email = payload.email;
+
+        if (email) {
+            emailElement.textContent = email;
+        } else {
+            emailElement.textContent = 'Email non disponible';
+        }
+    } else {
+        emailElement.textContent = 'Non connecté';
+    }
+});
