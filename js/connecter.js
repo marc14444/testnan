@@ -1,7 +1,7 @@
 const user = JSON.parse(localStorage.getItem('userData'));
 
 if (user) {
-    document.getElementById('username').textContent = `Bonjour🖖, ${user.data.nom}`;
+    document.getElementById('userEmail').textContent = `Bonjour🖖, ${user.data.nom}`;
 } else {
     window.location.href = '../index.html';
 }
