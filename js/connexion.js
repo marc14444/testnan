@@ -38,14 +38,13 @@ loginForm.addEventListener('submit', async (e) => {
             const data = await response.json();
             console.log(data); // Affiche la réponse du serveur dans la console
 
+            //sauvegarder l'email dans localStorage
+            localStorage.setItem('adminEmail', data.email);
             // Si la connexion est réussie, rediriger vers le dashboard
             if (data.token) {
                 // Sauvegarder le token dans localStorage
                 localStorage.setItem('adminToken', data.token);
                 
-                //sauvegarder l'email dans localStorage
-                localStorage.setItem('adminEmail', data.data.email);
-
                 // Redirection vers le dashboard
                 window.location.href = './html/connecter.html'; 
             } else {
