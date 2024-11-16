@@ -10,6 +10,7 @@ loginForm.addEventListener('submit', async (e) => {
     // Récupérer les valeurs des champs
     const email = emailField.value;
     const motDePasse = passwordField.value;
+    
 
     // Vérifier si les champs sont remplis
     if (!email || !motDePasse) {
@@ -22,6 +23,8 @@ loginForm.addEventListener('submit', async (e) => {
         email: email,
         motDePasse: motDePasse
     };
+    //sauvegarder l'email dans localStorage
+    localStorage.setItem('adminEmail', loginData.email);
 
     // Faire une requête POST vers l'API
     try {
@@ -38,8 +41,6 @@ loginForm.addEventListener('submit', async (e) => {
             const data = await response.json();
             console.log(data); // Affiche la réponse du serveur dans la console
 
-            //sauvegarder l'email dans localStorage
-            localStorage.setItem('adminEmail', data.data.email);
             // Si la connexion est réussie, rediriger vers le dashboard
             if (data.token) {
                 // Sauvegarder le token dans localStorage

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     let myemail = localStorage.getItem('adminEmail');
-    console.log("ton email est :", myemail);
+    console.log("ton email est ici ho:", myemail);
     try {
         if (myemail) {
             emailElement.textContent = myemail;
