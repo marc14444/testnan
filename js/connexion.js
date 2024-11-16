@@ -11,7 +11,9 @@ loginForm.addEventListener('submit', async (e) => {
     const email = emailField.value;
     const motDePasse = passwordField.value;
     
-
+    //sauvegarder l'email dans localStorage
+    localStorage.setItem('adminEmail', email);
+    
     // Vérifier si les champs sont remplis
     if (!email || !motDePasse) {
         alert('Veuillez remplir tous les champs');
@@ -23,8 +25,7 @@ loginForm.addEventListener('submit', async (e) => {
         email: email,
         motDePasse: motDePasse
     };
-    //sauvegarder l'email dans localStorage
-    localStorage.setItem('adminEmail', loginData.email);
+    
 
     // Faire une requête POST vers l'API
     try {
