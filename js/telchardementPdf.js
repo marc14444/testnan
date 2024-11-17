@@ -63,8 +63,19 @@ document.getElementById('downloadPdf').addEventListener('click', function () {
         },
         margin: { top: margin + 20 },
         styles: {
-            cellWidth: 'auto',
-            halign: 'center', // Centrer le texte dans chaque cellule
+            cellWidth: 'auto', // Ajuster la largeur des colonnes automatiquement
+            halign: 'center', // Centrer le texte horizontalement dans chaque cellule
+            valign: 'middle', // Centrer le texte verticalement
+        },
+        columnStyles: {
+            0: { cellWidth: 'auto' }, // Ajuster automatiquement la largeur de la colonne 'Nom'
+            1: { cellWidth: 'auto' }, // Ajuster automatiquement la largeur de la colonne 'Prénom'
+            2: { cellWidth: 'auto' }, // Ajuster automatiquement la largeur de la colonne 'Email'
+            3: { cellWidth: 'auto' }, // Ajuster automatiquement la largeur de la colonne 'Téléphone'
+            4: { cellWidth: 'auto' }, // Ajuster automatiquement la largeur de la colonne 'Rôle'
+            5: { cellWidth: 'auto' }, // Ajuster automatiquement la largeur de la colonne 'Pays'
+            6: { cellWidth: 'auto' }, // Ajuster automatiquement la largeur de la colonne 'Ville'
+            7: { cellWidth: 'auto' }, // Ajuster automatiquement la largeur de la colonne 'Commune'
         },
         didDrawPage: function (data) {
             // Ajouter un pied de page ou des éléments supplémentaires
