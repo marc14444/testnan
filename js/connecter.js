@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = JSON.parse(localStorage.getItem('userData'));
 
     if (user) {
-        document.getElementById('userEmail').textContent = `🖖, ${user.data.email}`;
+        document.getElementById('userEmail').textContent = `🖖,${user.data.email}`;
     } else {
         window.location.href = '../index.html';
     }

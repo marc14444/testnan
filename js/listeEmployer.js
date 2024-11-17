@@ -1,79 +1,82 @@
 window.addEventListener('load', async () => {
-    try {
-      // Récupérer le token depuis le localStorage
-      const token = localStorage.getItem('adminToken');
-    
-      if (!token) {
-        throw new Error('Token manquant. Vous devez vous connecter.');
-      }
-    
-      // Appel de l'API pour récupérer la liste des employés avec le token dans l'en-tête
-      const response = await fetch('https://testnanbackend.onrender.com/api/admin/employes', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-    
-      // Vérification si la réponse est correcte
-      if (!response.ok) {
-        console.error('Erreur HTTP:', response.status);
-        const errorResponse = await response.text();
-        console.error('Détails de l\'erreur:', errorResponse);
-        throw new Error('Erreur lors de la récupération des employés');
-      }
-    
-      // Récupérer les données sous forme JSON
-      const data = await response.json();
-    
-      // Vérification de la structure des données
-      console.log('Données reçues:', data);  // Afficher la réponse pour mieux comprendre sa structure
-  
-      // Sélection de l'élément où afficher les employés
-      const employeList = document.getElementById('employeList');
-    
-      // Vérifier si la réponse contient des employés
-      if (data && data.data && Array.isArray(data.data)) {
-        if (data.data.length > 0) {
-          // Pour chaque employé, créer un élément <li> et l'ajouter à la liste
-          data.data.forEach(employe => {
-            const employeItem = document.createElement('li');
-            employeItem.classList.add('border-b', 'pb-4', 'mb-4');
-      
-            // Création du contenu pour chaque employé avec boutons Modifier et Supprimer
-            employeItem.innerHTML = `
-              <div class="flex items-center justify-between">
-                <div>
-                  <h4 class="font-semibold text-lg">${employe.nom} ${employe.prenom}</h4>
-                  <p class="text-sm text-gray-500">${employe.email}</p>
-                </div>
-                <div>
-                  <span class="text-sm text-gray-500">${employe.role}</span>
-                </div>
-                <div class="space-x-4">
-                  <button class="text-blue-500 hover:underline" onclick="editEmploye('${employe._id}')">Modifier</button>
-                  <button class="text-red-500 hover:underline" onclick="deleteEmploye('${employe._id}')">Supprimer</button>
-                </div>
-              </div>
-            `;
-      
-            // Ajout de l'élément à la liste
-            employeList.appendChild(employeItem);
-          });
-        } else {
-          employeList.innerHTML = '<li>Aucun employé trouvé.</li>';
-        }
-      } else {
-        employeList.innerHTML = '<li>La structure des données est incorrecte.</li>';
-      }
-    } catch (error) {
-      console.error('Erreur:', error);
-      const employeList = document.getElementById('employeList');
-      employeList.innerHTML = '<li>Erreur de chargement des employés.</li>';
+  try {
+    // Récupérer le token depuis le localStorage
+    const token = localStorage.getItem('adminToken');
+
+    if (!token) {
+      throw new Error('Token manquant. Vous devez vous connecter.');
     }
-  });
-  
+
+    // Appel de l'API pour récupérer la liste des employés avec le token dans l'en-tête
+    const response = await fetch('https://testnanbackend.onrender.com/api/admin/employes', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    // Vérification si la réponse est correcte
+    if (!response.ok) {
+      console.error('Erreur HTTP:', response.status);
+      const errorResponse = await response.text();
+      console.error('Détails de l\'erreur:', errorResponse);
+      throw new Error('Erreur lors de la récupération des employés');
+    }
+
+    // Récupérer les données sous forme JSON
+    const data = await response.json();
+
+    // Vérification de la structure des données
+    console.log('Données reçues:', data);
+    localStorage.setItem('ListeEmployer', JSON.stringify(data)); // Afficher la réponse pour mieux comprendre sa structure
+
+    // Sélection de l'élément où afficher les employés
+    const employeList = document.getElementById('employeList');
+
+    // Vérifier si la réponse contient des employés
+    if (data && data.data && Array.isArray(data.data)) {
+      if (data.data.length > 0) {
+        // Trier les employés du plus récent au plus ancien en utilisant la date de création
+        data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        // Pour chaque employé, créer un élément <li> et l'ajouter à la liste
+        data.data.forEach(employe => {
+          const employeItem = document.createElement('li');
+          employeItem.classList.add('border-b', 'pb-4', 'mb-4');
+    
+          // Création du contenu pour chaque employé avec boutons Modifier et Supprimer
+          employeItem.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="font-semibold text-lg">${employe.nom} ${employe.prenom}</h4>
+                <p class="text-sm text-gray-500">${employe.email}</p>
+              </div>
+              <div>
+                <span class="text-sm text-gray-500">${employe.role}</span>
+              </div>
+              <div class="space-x-4">
+                <button class="text-blue-500 hover:underline" onclick="editEmploye('${employe._id}')">Modifier</button>
+                <button class="text-red-500 hover:underline" onclick="deleteEmploye('${employe._id}')">Supprimer</button>
+              </div>
+            </div>
+          `;
+    
+          // Ajout de l'élément à la liste
+          employeList.appendChild(employeItem);
+        });
+      } else {
+        employeList.innerHTML = '<li>Aucun employé trouvé.</li>';
+      }
+    } else {
+      employeList.innerHTML = '<li>La structure des données est incorrecte.</li>';
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    const employeList = document.getElementById('employeList');
+    employeList.innerHTML = '<li>Erreur de chargement des employés.</li>';
+  }
+});
   
   // Fonction pour supprimer un employé
   async function deleteEmploye(id) {
