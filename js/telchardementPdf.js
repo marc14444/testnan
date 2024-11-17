@@ -54,7 +54,7 @@ document.getElementById('downloadPdf').addEventListener('click', function () {
         headStyles: {
             fillColor: [0, 0, 255], // Couleur de fond de l'en-tête
             textColor: [255, 255, 255], // Couleur du texte de l'en-tête
-            fontSize: 12,
+            fontSize: 10,
             fontStyle: 'bold'
         },
         bodyStyles: {
